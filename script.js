@@ -17,25 +17,40 @@ document.getElementById('run').addEventListener('click', async () => {
   }
 
   try {
-    // Redirect stdout to capture print statements
+    // Redirect stdout and stderr to capture print and error statements
     let stdout = "";
+    let stderr = "";
     pyodide.setStdout({
       write: (text) => {
-        stdout += text;  // Append the text to the stdout variable
+        stdout += text;  // Capture output from print
       },
-      flush: () => {}  // Do nothing on flush
+      flush: () => {}  // Flush method, but we're not using it here
     });
 
-    // Run Python code
+    pyodide.setStderr({
+      write: (text) => {
+        stderr += text;  // Capture any error messages
+      },
+      flush: () => {}
+    });
+
+    // Run the Python code
     await pyodide.runPythonAsync(code);
 
-    // Display captured stdout (output from print statements)
-    resultDiv.textContent = stdout || "Code executed successfully with no output.";
+    // Display captured stdout and stderr in the result box
+    if (stdout) {
+      resultDiv.textContent = stdout;  // Show stdout (print output)
+    } else if (stderr) {
+      resultDiv.textContent = stderr;  // Show stderr (error output)
+    } else {
+      resultDiv.textContent = "Code executed successfully with no output.";
+    }
   } catch (err) {
-    // Display errors if any
+    // Handle unexpected errors
     resultDiv.textContent = `Error: ${err.message}`;
   } finally {
-    // Reset stdout to default after execution
+    // Reset stdout and stderr to default after execution
     pyodide.setStdout(pyodide.defaultStdout);
+    pyodide.setStderr(pyodide.defaultStderr);
   }
 });
