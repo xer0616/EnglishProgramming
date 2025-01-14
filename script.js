@@ -18,7 +18,7 @@ document.getElementById('run').addEventListener('click', async () => {
 
   try {
     // Redirect stdout to capture print statements
-    let stdout = "";
+    let stdout = "Wrong results";
     pyodide.setStdout({
       write: (text) => {
         stdout += text;
