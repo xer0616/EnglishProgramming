@@ -17,43 +17,32 @@ document.getElementById('run').addEventListener('click', async () => {
   }
 
   try {
-    // Capture print output and errors
-    const captureOutput = {
-      stdout: "",
-      stderr: "",
-      reset() {
-        this.stdout = "";
-        this.stderr = "";
-      },
-    };
-    captureOutput.reset();
+    // Use Python's io module to capture stdout
+    const wrappedCode = `
+import sys
+import io
+output = io.StringIO()
+sys.stdout = output
+sys.stderr = output
 
-    // Redirect stdout and stderr
-    pyodide.setStdout({
-      write: (text) => {
-        captureOutput.stdout += text;
-      },
-      flush: () => {},
-    });
+try:
+    exec(\"\"\"${code}\"\"\")
+except Exception as e:
+    print(e)
+finally:
+    sys.stdout = sys.__stdout__
+    sys.stderr = sys.__stderr__
 
-    pyodide.setStderr({
-      write: (text) => {
-        captureOutput.stderr += text;
-      },
-      flush: () => {},
-    });
+output.getvalue()
+`;
 
-    // Run the Python code
-    captureOutput.stdout += await pyodide.runPythonAsync(code);
+    // Run the wrapped Python code
+    const result = await pyodide.runPythonAsync(wrappedCode);
 
-    // Display captured output
-    resultDiv.textContent = captureOutput.stdout || captureOutput.stderr || "Code executed successfully with no output.";
+    // Display the result in the right box
+    resultDiv.textContent = result || "Code executed successfully with no output.";
   } catch (err) {
     // Display unexpected errors
     resultDiv.textContent = `Error: ${err.message}`;
-  } finally {
-    // Reset stdout and stderr to default
-    pyodide.setStdout(pyodide.defaultStdout);
-    pyodide.setStderr(pyodide.defaultStderr);
   }
 });
