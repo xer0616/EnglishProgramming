@@ -22,6 +22,7 @@ document.getElementById('run').addEventListener('click', async () => {
     pyodide.setStdout({
       write: (text) => {
         stdout += text;
+        stdout += '<<<<';
       },
       flush: () => {}
     });
