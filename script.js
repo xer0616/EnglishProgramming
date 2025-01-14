@@ -8,7 +8,10 @@ async function loadPyodideAndRun() {
 loadPyodideAndRun();
 
 document.getElementById('run').addEventListener('click', async () => {
-  const code = document.getElementById('code').value;
+  const codeTextarea = document.getElementById('code');
+  const code = codeTextarea.value;
+  
+  // Keep track of the result textarea
   const resultDiv = document.getElementById('result');
 
   if (!pyodide) {
@@ -18,25 +21,22 @@ document.getElementById('run').addEventListener('click', async () => {
 
   try {
     // Redirect stdout to capture print statements
-    let stdout = "Wrong results";
+    let stdout = "";
     pyodide.setStdout({
       write: (text) => {
         stdout += text;
-        stdout += '<<<<';
       },
       flush: () => {}
     });
 
-    // Run Python code
+    // Run the Python code
     await pyodide.runPythonAsync(code);
 
-    // Check if the main() function is defined and call it
-    if (pyodide.globals.get("main")) {
-      await pyodide.runPythonAsync("main()");
-    }
+    // Append the captured stdout to the left text box (code editor)
+    codeTextarea.value += `\n\n# Output:\n${stdout}`;
 
-    // Display captured stdout
-    resultDiv.textContent = stdout || "Code executed successfully with no output!";
+    // Update resultDiv if needed
+    resultDiv.textContent = "Execution completed.";
   } catch (err) {
     // Display errors
     resultDiv.textContent = `Error: ${err.message}`;
