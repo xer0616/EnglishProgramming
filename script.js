@@ -29,6 +29,11 @@ document.getElementById('run').addEventListener('click', async () => {
     // Run Python code
     await pyodide.runPythonAsync(code);
 
+    // Check if the main() function is defined and call it
+    if (pyodide.globals.get("main")) {
+      await pyodide.runPythonAsync("main()");
+    }
+
     // Display captured stdout
     resultDiv.textContent = stdout || "Code executed successfully with no output.";
   } catch (err) {
