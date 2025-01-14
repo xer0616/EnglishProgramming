@@ -17,39 +17,42 @@ document.getElementById('run').addEventListener('click', async () => {
   }
 
   try {
-    // Redirect stdout and stderr to capture print and error statements
-    let stdout = "";
-    let stderr = "";
+    // Capture print output and errors
+    const captureOutput = {
+      stdout: "",
+      stderr: "",
+      reset() {
+        this.stdout = "";
+        this.stderr = "";
+      },
+    };
+    captureOutput.reset();
+
+    // Redirect stdout and stderr
     pyodide.setStdout({
       write: (text) => {
-        stdout += text;  // Capture output from print
+        captureOutput.stdout += text;
       },
-      flush: () => {}  // Flush method, but we're not using it here
+      flush: () => {},
     });
 
     pyodide.setStderr({
       write: (text) => {
-        stderr += text;  // Capture any error messages
+        captureOutput.stderr += text;
       },
-      flush: () => {}
+      flush: () => {},
     });
 
     // Run the Python code
     await pyodide.runPythonAsync(code);
 
-    // Display captured stdout and stderr in the result box
-    if (stdout) {
-      resultDiv.textContent = stdout;  // Show stdout (print output)
-    } else if (stderr) {
-      resultDiv.textContent = stderr;  // Show stderr (error output)
-    } else {
-      resultDiv.textContent = "Code executed successfully with no output.";
-    }
+    // Display captured output
+    resultDiv.textContent = captureOutput.stdout || captureOutput.stderr || "Code executed successfully with no output.";
   } catch (err) {
-    // Handle unexpected errors
+    // Display unexpected errors
     resultDiv.textContent = `Error: ${err.message}`;
   } finally {
-    // Reset stdout and stderr to default after execution
+    // Reset stdout and stderr to default
     pyodide.setStdout(pyodide.defaultStdout);
     pyodide.setStderr(pyodide.defaultStderr);
   }
