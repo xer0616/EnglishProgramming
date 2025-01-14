@@ -35,7 +35,7 @@ document.getElementById('run').addEventListener('click', async () => {
     }
 
     // Display captured stdout
-    resultDiv.textContent = stdout || "Code executed successfully with no output.";
+    resultDiv.textContent = stdout || "Code executed successfully with no output!";
   } catch (err) {
     // Display errors
     resultDiv.textContent = `Error: ${err.message}`;
