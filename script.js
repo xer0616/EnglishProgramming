@@ -17,10 +17,25 @@ document.getElementById('run').addEventListener('click', async () => {
   }
 
   try {
-    // Run Python code using Pyodide
-    const result = await pyodide.runPythonAsync(code);
-    resultDiv.textContent = result || "Code executed successfully.";
+    // Redirect stdout to capture print statements
+    let stdout = "";
+    pyodide.setStdout({
+      write: (text) => {
+        stdout += text;
+      },
+      flush: () => {}
+    });
+
+    // Run Python code
+    await pyodide.runPythonAsync(code);
+
+    // Display captured stdout
+    resultDiv.textContent = stdout || "Code executed successfully with no output.";
   } catch (err) {
+    // Display errors
     resultDiv.textContent = `Error: ${err.message}`;
+  } finally {
+    // Reset stdout to default
+    pyodide.setStdout(pyodide.defaultStdout);
   }
 });
