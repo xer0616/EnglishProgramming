@@ -44,7 +44,7 @@ document.getElementById('run').addEventListener('click', async () => {
     });
 
     // Run the Python code
-    await pyodide.runPythonAsync(code);
+    captureOutput.stdout += await pyodide.runPythonAsync(code);
 
     // Display captured output
     resultDiv.textContent = captureOutput.stdout || captureOutput.stderr || "Code executed successfully with no output.";
