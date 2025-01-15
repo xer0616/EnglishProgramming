@@ -8,7 +8,8 @@ async function loadPyodideAndRun() {
 loadPyodideAndRun();
 
 document.getElementById('run').addEventListener('click', async () => {
-  const code = document.getElementById('code').value;
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const code = document.getElementById('code').value.trim();
   const resultDiv = document.getElementById('result');
 
   if (!pyodide) {
@@ -16,33 +17,45 @@ document.getElementById('run').addEventListener('click', async () => {
     return;
   }
 
+  if (!apiKey) {
+    resultDiv.textContent = "Please enter a valid API key.";
+    return;
+  }
+
+  if (!code) {
+    resultDiv.textContent = "Please enter some content in the left text box.";
+    return;
+  }
+
   try {
-    // Use Python's io module to capture stdout
-    const wrappedCode = `
-import sys
-import io
-output = io.StringIO()
-sys.stdout = output
-sys.stderr = output
+    // Step 1: Send the left box content to the Gemini API
+    const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: code }] }],
+      }),
+    });
 
-try:
-    exec(\"\"\"${code}\"\"\")
-except Exception as e:
-    print(e)
-finally:
-    sys.stdout = sys.__stdout__
-    sys.stderr = sys.__stderr__
+    if (!apiResponse.ok) {
+      throw new Error(`API request failed: ${apiResponse.statusText}`);
+    }
 
-output.getvalue()
-`;
+    const responseData = await apiResponse.json();
+    const generatedContent = responseData.contents[0]?.parts[0]?.text || "No response content received.";
 
-    // Run the wrapped Python code
-    const result = await pyodide.runPythonAsync(wrappedCode);
+    // Display the API response content in the right box
+    resultDiv.textContent = `Generated Code:\n\n${generatedContent}`;
 
-    // Display the result in the right box
-    resultDiv.textContent = result || "Code executed successfully with no output.";
-  } catch (err) {
-    // Display unexpected errors
-    resultDiv.textContent = `Error: ${err.message}`;
+    // Step 2: Execute the generated content in Pyodide
+    const output = await pyodide.runPythonAsync(generatedContent);
+
+    // Append the execution result to the right box
+    resultDiv.textContent += `\n\nExecution Result:\n\n${output}`;
+  } catch (error) {
+    // Handle errors from either the API or Pyodide execution
+    resultDiv.textContent = `Error: ${error.message}`;
   }
 });
