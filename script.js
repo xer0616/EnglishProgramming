@@ -49,10 +49,10 @@ document.getElementById('run').addEventListener('click', async () => {
     const responseData = await apiResponse.json();
 
     // Extract the generated Python code from the response
-    const generatedContent = responseData.contents;
+    const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text || "No Python code received.";
 
     // Display the API URL and the Python code in the right box
-    resultDiv.textContent = `API Request URL:\n\n${apiUrl}\n\nGenerated Code:\n\n${responseData}`;
+    resultDiv.textContent = `API Request URL:\n\n${apiUrl}\n\nGenerated Code:\n\n${generatedContent}`;
 
     // Step 2: Execute the generated content in Pyodide
     try {
