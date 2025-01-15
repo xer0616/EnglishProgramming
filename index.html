@@ -3,21 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Online Python IDE</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Python Execution with API Integration</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.3/full/pyodide.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+    #container {
+      display: flex;
+      flex: 1;
+    }
+    textarea, input {
+      flex: 1;
+      margin: 10px;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      resize: none;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="editor">
-      <textarea id="code" placeholder="Write your Python code here..."></textarea>
-      <button id="run">Run</button>
-    </div>
-    <div class="output">
-      <h2>Execution Result</h2>
-      <div id="result"></div>
-    </div>
+  <input type="text" id="apiKey" placeholder="Enter your API key here">
+  <div id="container">
+    <textarea id="code" placeholder="Enter your content here..."></textarea>
+    <textarea id="result" readonly placeholder="Results will appear here..."></textarea>
   </div>
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.0/full/pyodide.js"></script>
+  <button id="run">Run</button>
   <script src="script.js"></script>
 </body>
 </html>
