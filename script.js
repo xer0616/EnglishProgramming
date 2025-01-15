@@ -49,7 +49,7 @@ document.getElementById('run').addEventListener('click', async () => {
     const responseData = await apiResponse.json();
 
     // Extract the generated Python code from the response
-    const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text || "No Python code received.";
+    const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '') || "No Python code received.";
 
     // Display the API URL and the Python code in the right box
     resultDiv.textContent = `API Request URL:\n\n${apiUrl}\n\nGenerated Code:\n\n${generatedContent}`;
