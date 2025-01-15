@@ -52,7 +52,7 @@ document.getElementById('run').addEventListener('click', async () => {
     const generatedContent = responseData.contents;
 
     // Display the API URL and the Python code in the right box
-    resultDiv.textContent = `API Request URL:\n\n${apiUrl}\n\nGenerated Code:\n\n${generatedContent}`;
+    resultDiv.textContent = `API Request URL:\n\n${apiUrl}\n\nGenerated Code:\n\n${responseData}`;
 
     // Step 2: Execute the generated content in Pyodide
     try {
