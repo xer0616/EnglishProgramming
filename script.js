@@ -28,8 +28,11 @@ document.getElementById('run').addEventListener('click', async () => {
   }
 
   try {
+    // Construct the API URL
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
     // Step 1: Send the left box content to the Gemini API
-    const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    const apiResponse = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,8 +51,8 @@ document.getElementById('run').addEventListener('click', async () => {
     // Extract the generated Python code from the response
     const generatedContent = responseData.contents?.[0]?.parts?.[0]?.text || "No Python code received.";
 
-    // Display the Python code in the right box
-    resultDiv.textContent = `Generated Code:\n\n${generatedContent}`;
+    // Display the API URL and the Python code in the right box
+    resultDiv.textContent = `API Request URL:\n\n${apiUrl}\n\nGenerated Code:\n\n${generatedContent}`;
 
     // Step 2: Execute the generated content in Pyodide
     try {
