@@ -44,18 +44,22 @@ document.getElementById('run').addEventListener('click', async () => {
     }
 
     const responseData = await apiResponse.json();
-    const generatedContent = responseData.contents[0]?.parts[0]?.text || "No response content received.";
 
-    // Display the API response content in the right box
+    // Extract the generated Python code from the response
+    const generatedContent = responseData.contents?.[0]?.parts?.[0]?.text || "No Python code received.";
+
+    // Display the Python code in the right box
     resultDiv.textContent = `Generated Code:\n\n${generatedContent}`;
 
     // Step 2: Execute the generated content in Pyodide
-    const output = await pyodide.runPythonAsync(generatedContent);
-
-    // Append the execution result to the right box
-    resultDiv.textContent += `\n\nExecution Result:\n\n${output}`;
+    try {
+      const output = await pyodide.runPythonAsync(generatedContent);
+      resultDiv.textContent += `\n\nExecution Result:\n\n${output}`;
+    } catch (executionError) {
+      resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
+    }
   } catch (error) {
-    // Handle errors from either the API or Pyodide execution
-    resultDiv.textContent = `Error: ${error.message}`;
+    // Handle errors from the API request
+    resultDiv.textContent = `Error:\n\n${error.message}`;
   }
 });
