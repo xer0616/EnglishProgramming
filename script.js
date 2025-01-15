@@ -56,8 +56,27 @@ document.getElementById('run').addEventListener('click', async () => {
 
     // Step 2: Execute the generated content in Pyodide
     try {
-      const output = await pyodide.runPythonAsync(generatedContent);
-      resultDiv.textContent += `\n\nExecution Result:\n\n${output}`;
+      // Use Python's io module to capture stdout
+      const wrappedCode = `
+import sys
+import io
+output = io.StringIO()
+sys.stdout = output
+sys.stderr = output
+
+try:
+    exec(\"\"\"${generatedContent}\"\"\")
+except Exception as e:
+    print(e)
+finally:
+    sys.stdout = sys.__stdout__
+    sys.stderr = sys.__stderr__
+
+output.getvalue()
+`;
+
+      const output = await pyodide.runPythonAsync(wrappedCode);
+      resultDiv.textContent += `\n\nExecution Result:\n\n${output || "Code executed successfully with no output.";}`;
     } catch (executionError) {
       resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
     }
