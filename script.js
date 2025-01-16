@@ -57,9 +57,8 @@ document.getElementById('run').addEventListener('click', async () => {
 
     // Step 2: Execute the generated content in Pyodide
     try {
-      try {
-        // Use Python's io module to capture stdout
-        const wrappedCode = `
+      // Use Python's io module to capture stdout
+      const wrappedCode = `
 import sys
 import io
 output = io.StringIO()
