@@ -28,6 +28,8 @@ document.getElementById('run').addEventListener('click', async () => {
     return;
   }
 
+  code = "Generate a Python code only for\n" + code;
+
   try {
     // Construct the API URL
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
