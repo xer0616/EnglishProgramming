@@ -7,40 +7,27 @@ body {
   height: 100vh;
 }
 
+#apiKey {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
-  flex-direction: column; /* Stack the boxes vertically */
-  width: calc(100% - 20px); /* Align container width with apiKey */
-  margin: 0 auto; /* Center the container horizontally */
+  flex-direction: column;
+  height: 70%; /* Result area height is now 70% of the page */
 }
 
 textarea {
-  width: 98%; /* Match the full width of the container */
-  resize: none;
+  width: 100%;
+  padding: 10px;
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
-  margin: 10px 0; /* Vertical spacing */
-  line-height: 1.6;
-  height: calc(50vh - 40px); /* Each textarea takes 50% of the viewport height minus margins */
-}
-
-#run {
-  align-self: flex-start;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 10px 0; /* Spacing below the button */
-}
-
-#apiKey {
-  line-height: 1;
-  height: 40px; /* Fixed height for the API key input field */
-  padding: 5px 10px;
-  font-size: 16px;
-  margin: 10px 0; /* Vertical margin */
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 98%; /* Align width with container */
+  box-sizing: border-box;
+  resize: none;
 }
 
 #code {
@@ -54,8 +41,15 @@ textarea {
   overflow-y: auto;
 }
 
+#buttonContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+}
+
 button {
-  margin: 5px;
   padding: 10px 20px;
   font-size: 16px;
   font-family: Arial, sans-serif;
@@ -64,8 +58,8 @@ button {
   background-color: #007BFF;
   color: white;
   border-radius: 5px;
-  width: 120px; /* Set a fixed width to ensure consistency */
-  height: 40px; /* Set a fixed height to ensure consistency */
+  width: 120px; /* Same width for consistency */
+  height: 40px; /* Same height for consistency */
 }
 
 button:hover {
