@@ -9,17 +9,19 @@ body {
 
 .container {
   display: flex;
-  height: 100%;
+  flex-direction: column; /* Stack the boxes vertically */
+  width: calc(100% - 20px); /* Align container width with apiKey */
+  margin: 0 auto; /* Center the container horizontally */
 }
 
 textarea {
-  width: 100%;
+  width: 100%; /* Match the full width of the container */
   resize: none;
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
-  margin: 10px;
+  margin: 10px 0; /* Vertical spacing */
   line-height: 1.6;
-  height: calc(50vh - 20px); /* Each textarea takes 50% of the viewport height, minus margins */
+  height: calc(50vh - 40px); /* Each textarea takes 50% of the viewport height minus margins */
 }
 
 #run {
@@ -27,6 +29,7 @@ textarea {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  margin: 10px 0; /* Spacing below the button */
 }
 
 #apiKey {
@@ -34,12 +37,10 @@ textarea {
   height: 40px; /* Fixed height for the API key input field */
   padding: 5px 10px;
   font-size: 16px;
-  margin: 10px 0; /* Vertical margin only */
+  margin: 10px 0; /* Vertical margin */
   border: 1px solid #ddd;
   border-radius: 5px;
-  flex: 0;
-  align-self: flex-start;
-  width: calc(100% - 20px); /* Full width minus total horizontal margin */
+  width: 100%; /* Align width with container */
 }
 
 #result {
