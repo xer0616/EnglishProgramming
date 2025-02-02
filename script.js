@@ -10,7 +10,7 @@ loadPyodideAndRun();
 document.getElementById('run').addEventListener('click', async () => {
   // https://aistudio.google.com/apikey?_gl=1*12y67q5*_ga*MTg0MjY4MzU1Mi4xNzM3MDYzNDkx*_ga_P1DBVKWT6V*MTczNzA2MzQ5MC4xLjEuMTczNzA2MzU4Ny41MS4wLjQ4NTEwMzk1MA
   const apiKey = document.getElementById('apiKey').value.trim();
-  const code = document.getElementById('code').value.trim();
+  let code = document.getElementById('code').value.trim();
   const resultDiv = document.getElementById('result');
 
   if (!pyodide) {
@@ -29,6 +29,7 @@ document.getElementById('run').addEventListener('click', async () => {
   }
 
   code = "Generate a Python code only for\n" + code;
+  console.log(code)
 
   try {
     // Construct the API URL
@@ -50,6 +51,7 @@ document.getElementById('run').addEventListener('click', async () => {
     }
 
     const responseData = await apiResponse.json();
+    console.log(responseData)
 
     // Extract the generated Python code from the response
     const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
