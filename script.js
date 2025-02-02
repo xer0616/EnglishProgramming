@@ -32,9 +32,8 @@ document.getElementById('run').addEventListener('click', async () => {
     resultDiv.textContent = "Please enter some content in the left text box.";
     return;
   }
-
-  code = "Generate a Python code only for\n" + code + 'and run a validation function to validate the generate python code';
-  console.log(code)
+  resultDiv.textContent = ''
+  code = "Generate a Python code only for\n" + code + '\nand run a validation function to validate the generate python code';
 
   let isDone = false;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -44,7 +43,7 @@ document.getElementById('run').addEventListener('click', async () => {
         resultDiv.textContent += "\n\nExecution stopped by the user.";
         break; // Exit the loop if the stop flag is set
       }
-      resultDiv.textContent = code;
+      resultDiv.textContent += code;
       resultDiv.textContent += `\n=======================================================`;
       // Construct the API URL
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
@@ -71,7 +70,7 @@ document.getElementById('run').addEventListener('click', async () => {
       const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
   
       // Display the API URL and the Python code in the right box
-      resultDiv.textContent = `Generated Code:\n\n${generatedContent}`;
+      resultDiv.textContent += `\n >>>> Generated Code:\n\n${generatedContent}`;
   
       // Step 2: Execute the generated content in Pyodide
       try {
@@ -94,10 +93,11 @@ output.getvalue()
         resultDiv.textContent += `\n\nExecution Result:\n\n${output}` || "Code executed successfully with no output."
         isDone = true;
       } catch (executionError) {
+        const waitTime = 60;
         resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
-        resultDiv.textContent += `\n\nWait 10 seconds and will retry...`;
-        code = `Generate python code only to fix the exception ${executionError.message} of using generated code ${generatedContent}`
-        await sleep(10000);
+        resultDiv.textContent += `\n\nWait ${waitTime} seconds and will retry...`;
+        code = `Generate python code only without explanations to fix the exception ${executionError.message} of using generated code ${generatedContent}`
+        await sleep(waitTime*1000);
       }
     } while(!isDone);
   } catch (error) {
