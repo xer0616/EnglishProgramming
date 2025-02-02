@@ -28,7 +28,7 @@ document.getElementById('run').addEventListener('click', async () => {
     return;
   }
 
-  code = "Generate a Python code only for\n" + code;
+  code = "Generate a Python code only for\n" + code + 'and run a validation function to validate the generate python code';
   console.log(code)
 
   try {
