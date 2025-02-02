@@ -31,38 +31,43 @@ document.getElementById('run').addEventListener('click', async () => {
   code = "Generate a Python code only for\n" + code + 'and run a validation function to validate the generate python code';
   console.log(code)
 
+  let isDone = false;
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  resultDiv.textContent = `\n`;
   try {
-    // Construct the API URL
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-    // Step 1: Send the left box content to the Gemini API
-    const apiResponse = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: code }] }],
-      }),
-    });
-
-    if (!apiResponse.ok) {
-      throw new Error(`API request failed: ${apiResponse.statusText}`);
-    }
-
-    const responseData = await apiResponse.json();
-    console.log(responseData)
-
-    // Extract the generated Python code from the response
-    const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
-
-    // Display the API URL and the Python code in the right box
-    resultDiv.textContent = `Generated Code:\n\n${generatedContent}`;
-
-    // Step 2: Execute the generated content in Pyodide
-    try {
-      // Use Python's io module to capture stdout
-      const wrappedCode = `
+    do {
+      resultDiv.textContent += `\n=======================================================`;
+      // Construct the API URL
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  
+      // Step 1: Send the left box content to the Gemini API
+      const apiResponse = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: code }] }],
+        }),
+      });
+  
+      if (!apiResponse.ok) {
+        throw new Error(`API request failed: ${apiResponse.statusText}`);
+      }
+  
+      const responseData = await apiResponse.json();
+      console.log(responseData)
+  
+      // Extract the generated Python code from the response
+      const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
+  
+      // Display the API URL and the Python code in the right box
+      resultDiv.textContent = `Generated Code:\n\n${generatedContent}`;
+  
+      // Step 2: Execute the generated content in Pyodide
+      try {
+        // Use Python's io module to capture stdout
+        const wrappedCode = `
 import sys
 import io
 output = io.StringIO()
@@ -76,11 +81,16 @@ sys.stderr = sys.__stderr__
 output.getvalue()
 `;
 
-      const output = await pyodide.runPythonAsync(wrappedCode);
-      resultDiv.textContent += `\n\nExecution Result:\n\n${output}` || "Code executed successfully with no output."
-    } catch (executionError) {
-      resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
-    }
+        const output = await pyodide.runPythonAsync(wrappedCode);
+        resultDiv.textContent += `\n\nExecution Result:\n\n${output}` || "Code executed successfully with no output."
+        isDone = true;
+      } catch (executionError) {
+        resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
+        resultDiv.textContent += `\n\nWait 10 seconds and will retry...`;
+        code = `Fix the exception ${executionError.message} of using generated code ${generatedContent}`
+        await sleep(10000);
+      }
+    } while(!isDone);
   } catch (error) {
     // Handle errors from the API request
     resultDiv.textContent = `Error:\n\n${error.message}`;
