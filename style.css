@@ -34,11 +34,12 @@ textarea {
   height: 40px; /* Fixed height for the API key input field */
   padding: 5px 10px;
   font-size: 16px;
-  margin: 10px;
+  margin: 10px 0; /* Vertical margin only */
   border: 1px solid #ddd;
   border-radius: 5px;
   flex: 0;
   align-self: flex-start;
+  width: calc(100% - 20px); /* Full width minus total horizontal margin */
 }
 
 #result {
