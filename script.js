@@ -38,13 +38,13 @@ document.getElementById('run').addEventListener('click', async () => {
 
   let isDone = false;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  resultDiv.textContent = `\n`;
   try {
       do {
       if (shouldStop) {
-        resultArea.value = "Execution stopped by the user.";
+        resultDiv.textContent += "\n\nExecution stopped by the user.";
         break; // Exit the loop if the stop flag is set
       }
+      resultDiv.textContent = code;
       resultDiv.textContent += `\n=======================================================`;
       // Construct the API URL
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
