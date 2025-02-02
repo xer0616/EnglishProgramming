@@ -43,10 +43,15 @@ textarea {
   width: 98%; /* Align width with container */
 }
 
+#code {
+  height: 30%; /* Code textarea height */
+}
+
 #result {
-  overflow-y: auto;
-  background: #fff;
+  flex-grow: 1; /* Result textarea takes remaining space */
+  background-color: #f7f7f7;
   border: 1px solid #ddd;
+  overflow-y: auto;
 }
 
 button {
