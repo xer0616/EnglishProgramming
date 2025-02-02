@@ -48,3 +48,8 @@ textarea {
   background: #fff;
   border: 1px solid #ddd;
 }
+
+/* Set 1 line height for #apiKey */
+#apiKey {
+  line-height: 1;
+}
