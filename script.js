@@ -1,4 +1,5 @@
 let pyodide;
+let shouldStop = false; // Variable to control the loop
 
 async function loadPyodideAndRun() {
   // Load Pyodide
@@ -6,6 +7,10 @@ async function loadPyodideAndRun() {
 }
 
 loadPyodideAndRun();
+
+document.getElementById("stop").addEventListener("click", () => {
+  shouldStop = true; // Set the stop flag to true
+});
 
 document.getElementById('run').addEventListener('click', async () => {
   // https://aistudio.google.com/apikey?_gl=1*12y67q5*_ga*MTg0MjY4MzU1Mi4xNzM3MDYzNDkx*_ga_P1DBVKWT6V*MTczNzA2MzQ5MC4xLjEuMTczNzA2MzU4Ny41MS4wLjQ4NTEwMzk1MA
@@ -35,7 +40,11 @@ document.getElementById('run').addEventListener('click', async () => {
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   resultDiv.textContent = `\n`;
   try {
-    do {
+      do {
+      if (shouldStop) {
+        resultArea.value = "Execution stopped by the user.";
+        break; // Exit the loop if the stop flag is set
+      }
       resultDiv.textContent += `\n=======================================================`;
       // Construct the API URL
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
