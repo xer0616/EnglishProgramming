@@ -69,13 +69,9 @@ output = io.StringIO()
 sys.stdout = output
 sys.stderr = output
 
-try:
-    exec(\"\"\"${generatedContent}\"\"\")
-except Exception as e:
-    print(e)
-finally:
-    sys.stdout = sys.__stdout__
-    sys.stderr = sys.__stderr__
+exec(\"\"\"${generatedContent}\"\"\")
+sys.stdout = sys.__stdout__
+sys.stderr = sys.__stderr__
 
 output.getvalue()
 `;
