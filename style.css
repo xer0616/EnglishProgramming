@@ -15,7 +15,7 @@ body {
 }
 
 textarea {
-  width: 100%; /* Match the full width of the container */
+  width: 98%; /* Match the full width of the container */
   resize: none;
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
@@ -40,7 +40,7 @@ textarea {
   margin: 10px 0; /* Vertical margin */
   border: 1px solid #ddd;
   border-radius: 5px;
-  width: 95%; /* Align width with container */
+  width: 98%; /* Align width with container */
 }
 
 #result {
