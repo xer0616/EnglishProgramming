@@ -27,6 +27,7 @@ textarea {
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
   margin-bottom: 10px;
+  line-height: 1.6; /* Increase line height for better readability */
 }
 
 #run {
@@ -47,15 +48,18 @@ textarea {
   padding: 10px;
   background: #fff;
   border: 1px solid #ddd;
+  line-height: 1.6; /* Ensure the result area also has increased line height */
 }
 
-/* Styling for #apiKey */
+/* Fix for #apiKey height */
 #apiKey {
   line-height: 1;
-  height: auto; /* Ensure height is determined by content */
-  padding: 10px; /* Add padding for better text alignment */
+  height: 40px; /* Explicit height */
+  padding: 5px 10px; /* Padding for better text alignment */
   font-size: 16px;
-  margin: 10px; /* Consistent spacing with other elements */
+  margin: 10px; /* Consistent margin */
   border: 1px solid #ddd;
   border-radius: 5px;
+  flex: 0; /* Prevent stretching in flexbox layouts */
+  align-self: flex-start; /* Align properly in flex containers */
 }
