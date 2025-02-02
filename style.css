@@ -48,3 +48,21 @@ textarea {
   background: #fff;
   border: 1px solid #ddd;
 }
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 5px;
+  width: 120px; /* Set a fixed width to ensure consistency */
+  height: 40px; /* Set a fixed height to ensure consistency */
+}
+
+button:hover {
+  background-color: #0056b3;
+}
