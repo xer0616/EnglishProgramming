@@ -40,7 +40,7 @@ textarea {
   margin: 10px 0; /* Vertical margin */
   border: 1px solid #ddd;
   border-radius: 5px;
-  width: 100%; /* Align width with container */
+  width: 95%; /* Align width with container */
 }
 
 #result {
