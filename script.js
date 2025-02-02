@@ -87,7 +87,7 @@ output.getvalue()
       } catch (executionError) {
         resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
         resultDiv.textContent += `\n\nWait 10 seconds and will retry...`;
-        code = `Fix the exception ${executionError.message} of using generated code ${generatedContent}`
+        code = `Generate python code only to fix the exception ${executionError.message} of using generated code ${generatedContent}`
         await sleep(10000);
       }
     } while(!isDone);
