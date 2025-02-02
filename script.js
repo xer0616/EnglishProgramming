@@ -1,5 +1,6 @@
 let pyodide;
 let shouldStop = false; // Variable to control the loop
+let generatedContent = ''
 
 async function loadPyodideAndRun() {
   // Load Pyodide
@@ -10,6 +11,37 @@ loadPyodideAndRun();
 
 document.getElementById("stop").addEventListener("click", () => {
   shouldStop = true; // Set the stop flag to true
+});
+
+document.getElementById("download").addEventListener("click", () => {
+  const codeContent = document.getElementById("code").value.trim();
+
+  // Check if codeContent is empty
+  if (!codeContent) {
+    alert("The 'Enter your content here' field is empty. Please provide content to name the file.");
+    return;
+  }
+  if (!generatedContent) {
+    alert("The 'Enter your content here' field is empty. Please provide content to name the file.");
+    return;
+  }
+  // Replace all non-English letters with underscores
+  const sanitizedFileName = codeContent.replace(/[^a-zA-Z0-9]/g, "_");
+
+  // Create a blob with the generated content
+  const blob = new Blob([generatedContent], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+
+  // Create a temporary anchor element to trigger download
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${sanitizedFileName}.py`;
+  document.body.appendChild(a);
+  a.click();
+
+  // Clean up
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 });
 
 document.getElementById('run').addEventListener('click', async () => {
@@ -67,7 +99,7 @@ document.getElementById('run').addEventListener('click', async () => {
       console.log(responseData)
   
       // Extract the generated Python code from the response
-      const generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
+      generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
   
       // Display the API URL and the Python code in the right box
       resultDiv.textContent += `\n >>>> Generated Code:\n\n${generatedContent}`;
