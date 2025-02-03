@@ -84,7 +84,7 @@ document.getElementById('run').addEventListener('click', async () => {
         resultDiv.textContent += "\n\nExecution stopped by the user.";
         break; // Exit the loop if the stop flag is set
       }
-      #resultDiv.textContent += code;
+      //resultDiv.textContent += code;
       resultDiv.textContent = `========================= ${loopCnt++} ==============================\n`;
       // Construct the API URL
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
@@ -110,7 +110,7 @@ document.getElementById('run').addEventListener('click', async () => {
       generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
   
       // Display the API URL and the Python code in the right box
-      #resultDiv.textContent += `\n >>>> Generated Code:\n\n${generatedContent}`;
+      //resultDiv.textContent += `\n >>>> Generated Code:\n\n${generatedContent}`;
   
       // Step 2: Execute the generated content in Pyodide
       try {
