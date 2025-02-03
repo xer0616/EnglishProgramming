@@ -56,6 +56,7 @@ document.getElementById('run').addEventListener('click', async () => {
   const apiKey = document.getElementById('apiKey').value.trim();
   let code = document.getElementById('code').value.trim();
   const resultDiv = document.getElementById('result');
+  resultDiv.style.outline = "2px black";
 
   if (!pyodide) {
     resultDiv.textContent = "Pyodide is still loading. Please wait.";
