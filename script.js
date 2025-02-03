@@ -87,6 +87,7 @@ document.getElementById('run').addEventListener('click', async () => {
       //resultDiv.textContent += code;
       // Construct the API URL
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      resultDiv.textContent = `========================= ${loopCnt++} ==============================\nCode generating...\n`;
   
       // Step 1: Send the left box content to the Gemini API
       const apiResponse = await fetch(apiUrl, {
@@ -104,7 +105,6 @@ document.getElementById('run').addEventListener('click', async () => {
       }
   
       const responseData = await apiResponse.json();
-      resultDiv.textContent = `========================= ${loopCnt++} ==============================\n`;
   
       // Extract the generated Python code from the response
       generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
