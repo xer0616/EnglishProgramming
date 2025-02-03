@@ -73,7 +73,7 @@ document.getElementById('run').addEventListener('click', async () => {
     return;
   }
   resultDiv.textContent = ''
-  code = "Generate a Python code only for\n" + code + '\nand run a validation function to validate the generate python code';
+  code = "Generate a Python code only for\n" + code + '\nand run a validation function, throw exceptions when validation fails, to validate the generate python code';
 
   let isDone = false;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
