@@ -131,6 +131,7 @@ output.getvalue()
 
         const output = await pyodide.runPythonAsync(wrappedCode);
         resultDiv.textContent += `\n\nExecution Result:\n\n${output}` || "Code executed successfully with no output."
+        resultDiv.textContent += `\n\nThe solution is:\n${generatedContent}\n\nPress the 'Download' button to download the code.`
         isDone = true;
         resultDiv.style.outline = "2px solid green";
       } catch (executionError) {
