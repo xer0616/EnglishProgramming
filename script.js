@@ -130,6 +130,7 @@ output.getvalue()
         const output = await pyodide.runPythonAsync(wrappedCode);
         resultDiv.textContent += `\n\nExecution Result:\n\n${output}` || "Code executed successfully with no output."
         isDone = true;
+        resultDiv.style.outline = "2px solid green";
       } catch (executionError) {
         const waitTime = 60;
         resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
