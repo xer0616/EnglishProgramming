@@ -105,6 +105,7 @@ document.getElementById('run').addEventListener('click', async () => {
       }
   
       const responseData = await apiResponse.json();
+      console.log(responseData)
   
       // Extract the generated Python code from the response
       generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
