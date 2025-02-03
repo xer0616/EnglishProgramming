@@ -79,6 +79,10 @@ document.getElementById('run').addEventListener('click', async () => {
   let isDone = false;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   while(true) {
+    if (shouldStop) {
+      resultDiv.textContent += "\n\nExecution stopped by the user.";
+      break; // Exit the loop if the stop flag is set
+    }
     try {
       do {
         if (shouldStop) {
@@ -146,7 +150,8 @@ output.getvalue()
       } while(!isDone);
     } catch (error) {
       // Handle errors from the API request
-      resultDiv.textContent = `Error:\n\n${error.stack}. Retrying.`;
+      resultDiv.textContent = `Error:\n\n${error.stack} of trying \n${code}. Retrying.`;
+      await sleep(60000);
     }
   }
 });
