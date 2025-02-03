@@ -85,7 +85,6 @@ document.getElementById('run').addEventListener('click', async () => {
         break; // Exit the loop if the stop flag is set
       }
       //resultDiv.textContent += code;
-      resultDiv.textContent = `========================= ${loopCnt++} ==============================\n`;
       // Construct the API URL
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
   
@@ -105,6 +104,7 @@ document.getElementById('run').addEventListener('click', async () => {
       }
   
       const responseData = await apiResponse.json();
+      resultDiv.textContent = `========================= ${loopCnt++} ==============================\n`;
   
       // Extract the generated Python code from the response
       generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
