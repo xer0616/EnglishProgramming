@@ -44,6 +44,12 @@ document.getElementById("download").addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
+document.getElementById("scrollToBottom").addEventListener("click", () => {
+  const resultTextarea = document.getElementById("result");
+  resultTextarea.scrollTop = resultTextarea.scrollHeight;
+});
+
+
 document.getElementById('run').addEventListener('click', async () => {
   // https://aistudio.google.com/apikey?_gl=1*12y67q5*_ga*MTg0MjY4MzU1Mi4xNzM3MDYzNDkx*_ga_P1DBVKWT6V*MTczNzA2MzQ5MC4xLjEuMTczNzA2MzU4Ny41MS4wLjQ4NTEwMzk1MA
   const apiKey = document.getElementById('apiKey').value.trim();
