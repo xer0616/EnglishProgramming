@@ -144,6 +144,6 @@ output.getvalue()
     } while(!isDone);
   } catch (error) {
     // Handle errors from the API request
-    resultDiv.textContent = `Error:\n\n${error.message}`;
+    resultDiv.textContent = `Error:\n\n${error.stack}. Need re-run.`;
   }
 });
