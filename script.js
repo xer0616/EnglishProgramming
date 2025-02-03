@@ -79,7 +79,7 @@ document.getElementById('run').addEventListener('click', async () => {
 
   let isDone = false;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  while(true) {
+  while(!isDone) {
     if (shouldStop) {
       resultDiv.textContent += "\n\nExecution stopped by the user.";
       break; // Exit the loop if the stop flag is set
