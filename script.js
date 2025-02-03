@@ -78,45 +78,46 @@ document.getElementById('run').addEventListener('click', async () => {
 
   let isDone = false;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  try {
+  while(true) {
+    try {
       do {
-      if (shouldStop) {
-        resultDiv.textContent += "\n\nExecution stopped by the user.";
-        break; // Exit the loop if the stop flag is set
-      }
-      //resultDiv.textContent += code;
-      // Construct the API URL
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-      resultDiv.textContent = `========================= ${loopCnt++} ==============================\nCode generating...\n`;
-  
-      // Step 1: Send the left box content to the Gemini API
-      const apiResponse = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: code }] }],
-        }),
-      });
-  
-      if (!apiResponse.ok) {
-        throw new Error(`API request failed: ${apiResponse.statusText}`);
-      }
-  
-      const responseData = await apiResponse.json();
-      console.log(responseData.candidates[0])
-  
-      // Extract the generated Python code from the response
-      generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
-  
-      // Display the API URL and the Python code in the right box
-      //resultDiv.textContent += `\n >>>> Generated Code:\n\n${generatedContent}`;
-  
-      // Step 2: Execute the generated content in Pyodide
-      try {
-        // Use Python's io module to capture stdout
-        const wrappedCode = `
+        if (shouldStop) {
+          resultDiv.textContent += "\n\nExecution stopped by the user.";
+          break; // Exit the loop if the stop flag is set
+        }
+        //resultDiv.textContent += code;
+        // Construct the API URL
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        resultDiv.textContent = `========================= ${loopCnt++} ==============================\nCode generating...\n`;
+    
+        // Step 1: Send the left box content to the Gemini API
+        const apiResponse = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: code }] }],
+          }),
+        });
+    
+        if (!apiResponse.ok) {
+          throw new Error(`API request failed: ${apiResponse.statusText}`);
+        }
+    
+        const responseData = await apiResponse.json();
+        console.log(responseData.candidates[0])
+    
+        // Extract the generated Python code from the response
+        generatedContent = responseData.candidates?.[0].content.parts?.[0]?.text.replace('python', '').replaceAll("```", "").replaceAll('"""', "#") || "No Python code received.";
+    
+        // Display the API URL and the Python code in the right box
+        //resultDiv.textContent += `\n >>>> Generated Code:\n\n${generatedContent}`;
+    
+        // Step 2: Execute the generated content in Pyodide
+        try {
+          // Use Python's io module to capture stdout
+          const wrappedCode = `
 import sys
 import io
 output = io.StringIO()
@@ -130,21 +131,22 @@ sys.stderr = sys.__stderr__
 output.getvalue()
 `;
 
-        const output = await pyodide.runPythonAsync(wrappedCode);
-        resultDiv.textContent += `\n\nExecution Result:\n\n${output}` || "Code executed successfully with no output."
-        resultDiv.textContent += `\n\nThe solution is:\n${generatedContent}\n\nPress the 'Download' button to download the code.`
-        isDone = true;
-        resultDiv.style.outline = "2px solid green";
-      } catch (executionError) {
-        const waitTime = 30;
-        resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
-        resultDiv.textContent += `\n\n${new Date().toLocaleString()} - Wait ${waitTime} seconds and will retry...\n`;
-        code = `Generate python code only without explanations to fix the exception ${executionError.message} of using generated code ${generatedContent}`
-        await sleep(waitTime*1000);
-      }
-    } while(!isDone);
-  } catch (error) {
-    // Handle errors from the API request
-    resultDiv.textContent = `Error:\n\n${error.stack}. Need re-run.`;
+          const output = await pyodide.runPythonAsync(wrappedCode);
+          resultDiv.textContent += `\n\nExecution Result:\n\n${output}` || "Code executed successfully with no output."
+          resultDiv.textContent += `\n\nThe solution is:\n${generatedContent}\n\nPress the 'Download' button to download the code.`
+          isDone = true;
+          resultDiv.style.outline = "2px solid green";
+        } catch (executionError) {
+          const waitTime = 30;
+          resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
+          resultDiv.textContent += `\n\n${new Date().toLocaleString()} - Wait ${waitTime} seconds and will retry...\n`;
+          code = `Generate python code only without explanations to fix the exception ${executionError.message} of using generated code ${generatedContent}`
+          await sleep(waitTime*1000);
+        }
+      } while(!isDone);
+    } catch (error) {
+      // Handle errors from the API request
+      resultDiv.textContent = `Error:\n\n${error.stack}. Retrying.`;
+    }
   }
 });
