@@ -1,7 +1,6 @@
 let pyodide;
 let shouldStop = false; // Variable to control the loop
 let generatedContent = ''
-let loopCnt = 1;
 
 async function loadPyodideAndRun() {
   // Load Pyodide
@@ -56,6 +55,8 @@ document.getElementById('run').addEventListener('click', async () => {
   const apiKey = document.getElementById('apiKey').value.trim();
   let code = document.getElementById('code').value.trim();
   const resultDiv = document.getElementById('result');
+  let loopCnt = 1;
+  
   resultDiv.style.outline = "2px black";
 
   if (!pyodide) {
