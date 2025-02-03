@@ -81,13 +81,11 @@ document.getElementById('run').addEventListener('click', async () => {
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   while(!isDone) {
     if (shouldStop) {
-      resultDiv.textContent += "\n\nExecution stopped by the user.";
       break; // Exit the loop if the stop flag is set
     }
     try {
       do {
         if (shouldStop) {
-          resultDiv.textContent += "\n\nExecution stopped by the user.";
           break; // Exit the loop if the stop flag is set
         }
         //resultDiv.textContent += code;
@@ -154,5 +152,8 @@ output.getvalue()
       resultDiv.textContent = `Error:\n\n${error.stack} of trying \n${code}. Retrying.`;
       await sleep(60000);
     }
+  }
+  if (shouldStop) {
+    resultDiv.textContent += "\n\nExecution stopped by the user.";
   }
 });
