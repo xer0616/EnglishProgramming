@@ -1,6 +1,7 @@
 let pyodide;
 let shouldStop = false; // Variable to control the loop
 let generatedContent = ''
+let loopCnt = 1;
 
 async function loadPyodideAndRun() {
   // Load Pyodide
@@ -82,7 +83,7 @@ document.getElementById('run').addEventListener('click', async () => {
         break; // Exit the loop if the stop flag is set
       }
       resultDiv.textContent += code;
-      resultDiv.textContent += `\n=======================================================`;
+      resultDiv.textContent += `\n========================= ${loopCnt++} ==============================`;
       // Construct the API URL
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
   
