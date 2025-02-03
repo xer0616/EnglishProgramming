@@ -135,7 +135,7 @@ output.getvalue()
         isDone = true;
         resultDiv.style.outline = "2px solid green";
       } catch (executionError) {
-        const waitTime = 30;
+        const waitTime = 10;
         resultDiv.textContent += `\n\nExecution Error:\n\n${executionError.message}`;
         resultDiv.textContent += `\n\n${new Date().toLocaleString()} - Wait ${waitTime} seconds and will retry...\n`;
         code = `Generate python code only without explanations to fix the exception ${executionError.message} of using generated code ${generatedContent}`
