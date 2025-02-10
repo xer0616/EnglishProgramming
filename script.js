@@ -154,6 +154,6 @@ output.getvalue()
     }
   }
   if (shouldStop) {
-    resultDiv.textContent += "\n\nExecution stopped by the user.";
+    resultDiv.textContent += "\n>>>> Execution stopped by the user.";
   }
 });
