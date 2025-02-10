@@ -75,7 +75,7 @@ document.getElementById('run').addEventListener('click', async () => {
     return;
   }
   resultDiv.textContent = ''
-  code = "Generate a Python code only for\n" + code + '\nand run a validation function, throws exceptions when it fails, to validate the generate python code, no execption handler in main function';
+  code = "Generate a Python code only, without using external modules, for\n" + code + '\nand run a validation function, throws exceptions when it fails, to validate the generate python code, no execption handler in main function';
 
   let isDone = false;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
